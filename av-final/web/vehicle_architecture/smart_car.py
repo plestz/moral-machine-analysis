@@ -41,10 +41,18 @@ class SmartCar(Car):
         tot_passenger_value = sum([SmartCar.calculate_human_value(passenger) for passenger in passengers])
         avg_passenger_value = tot_passenger_value / len(passengers)
 
+        print("tot_passenger_value", tot_passenger_value)
+        print("avg_passenger_value", avg_passenger_value)
+
         tot_pedestrian_value = sum([SmartCar.calculate_human_value(pedestrian) for pedestrian in pedestrians])
         avg_pedestrian_value = tot_pedestrian_value / len(pedestrians)
 
-        return Decision.PROTECT_PASSENGERS if ((400 * len(passengers) + avg_pedestrian_value) >= (400 * len(pedestrians) + avg_pedestrian_value)) else Decision.PROTECT_PEDESTRIANS
+        print("tot_pedestrian_value", tot_pedestrian_value)
+        print("avg_pedestrian_value", avg_pedestrian_value)
+
+        # return Decision.PROTECT_PASSENGERS if (avg_passenger >= avg_pedestrian_value) else Decision.PROTECT_PEDESTRIANS
+        return Decision.PROTECT_PASSENGERS if ((200 * len(passengers) + avg_passenger_value) >= (200 * len(pedestrians) + avg_pedestrian_value)) else Decision.PROTECT_PEDESTRIANS
+        # return Decision.PROTECT_PASSENGERS if ((400 * len(passengers) + avg_passenger_value) >= (400 * len(pedestrians) + avg_pedestrian_value)) else Decision.PROTECT_PEDESTRIANS
 
     @staticmethod
     def calculate_human_value(person: Person) -> int:
@@ -108,6 +116,15 @@ if __name__ == '__main__':
     passengers: "list[Passenger]" = random.sample(people, num_passengers)
     pedestrians: "list[Pedestrian]" = random.sample(people, num_pedestrians)
 
+    print("passengers")
+    for passenger in passengers:
+        print(passenger)
+    print("pedestrians")
+    for pedestrian in pedestrians:
+        print(pedestrian)
+
     dec = SmartCar.calculate_mean_decision(passengers, pedestrians)
+    print("num_passengers: ", num_passengers)
+    print("num_pedestrians: ", num_pedestrians)
 
     print(dec)

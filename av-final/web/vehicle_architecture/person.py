@@ -72,3 +72,18 @@ class Person:
             people.append(person)
 
         return people
+
+    def __str__(self):
+        return f"Name: {self.name}\n" \
+               f"Age: {self.age}\n" \
+               f"Gender: {self.gender}\n" \
+               f"Weight: {self.weight} lbs\n" \
+               f"Education Level: {self.education_level}\n" \
+               f"Occupation: {self.occupation}\n" \
+               f"Is Doctor: {self.is_doctor}\n" \
+               f"Employed: {self.employed}\n" \
+               f"Wealth Class: {self.wealth_class.name}\n" \
+               f"Married: {self.married}\n" \
+               f"Number of Children: {self.num_children}\n" \
+               f"Number of Living Relatives: {self.num_living_relatives}\n" \
+               f"Actively Breaking Law: {self.actively_breaking_law}"
