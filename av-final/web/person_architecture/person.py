@@ -1,3 +1,5 @@
+import random
+import numpy as np
 from enum import Enum
 
 class Class(Enum):
@@ -29,4 +31,44 @@ class Person:
         self.num_living_relatives = num_living_relatives
         self.actively_breaking_law = actively_breaking_law
 
-    
+    @staticmethod
+    def get_people(num_people: int) -> "list[Person]":
+        people = []
+        occupations = ['Engineer', 'Doctor', 'Teacher', 'Cashier', 'Police Officer', 'Unemployed', 'Chef', 'Artist', 'Salesperson', 'Journalist', 'Manager', 'Scientist', 'Programmer']
+
+        for _ in range(num_people):
+            first_name = random.choice(['Emma', 'Olivia', 'Ava', 'Isabella', 'Sophia', 'Mia', 'Charlotte', 'Amelia', 'Harper', 'Evelyn', 'Liam', 'Noah', 'William', 'James', 'Oliver', 'Benjamin', 'Elijah', 'Lucas', 'Mason', 'Logan'])
+            last_name = random.choice(['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson', 'Thomas', 'Taylor', 'Moore', 'Jackson', 'Martin'])
+            name = first_name + " " + last_name
+            age = random.randint(0, 100)
+            gender = random.choice(['M', 'F', 'Non-binary'])
+            
+            if age < 2:
+                weight = round(random.uniform(7, 20), 1)
+            elif age < 10:
+                weight = round(random.uniform(20, 80), 1)
+            elif age < 20:
+                weight = round(random.uniform(70, 200), 1)
+            else:
+                weight = round(random.uniform(100, 230), 1)
+
+            education_level = random.randint(0, 20)
+            occupation = 'Student' if age <= 18 else random.choice(occupations)
+            is_doctor = occupation == 'Doctor'
+            employed = occupation != 'Unemployed'
+            wealth_class = np.random.choice(list(Class), p=[0.2, 0.2, 0.2, 0.2, 0.1, 0.05, 0.05])
+            
+            if age >= 26:
+                married = random.choice([True, False])
+            else:
+                married = False
+
+            num_children = random.randint(0, 5)
+            num_living_relatives = random.randint(0, 15)
+            actively_breaking_law = random.random() < 0.1
+
+            person = Person(name, age, gender, weight, education_level, occupation, is_doctor, employed, wealth_class, married, num_children, num_living_relatives, actively_breaking_law)
+
+            people.append(person)
+
+        return people

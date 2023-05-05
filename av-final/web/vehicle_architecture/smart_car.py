@@ -47,7 +47,7 @@ class SmartCar(Car):
     def calculate_human_value(self, person: Person) -> int:
         age_bias, weight_bias, class_bias, law_bias = self.get_regional_bias(person)
         return (((100 - person.age) if person.age >= 30 else (person.age + 20)) + age_bias) \
-                + ((300 - int(person.weight)) + weight_bias)
+                + (((300 - int(person.weight)) if self.age >= 18 else 100) + weight_bias)
                 + (150 + person.education_level * 10)
                 + (400 if person.is_doctor else 0)
                 + (300 if person.employed else 0)
@@ -93,4 +93,9 @@ class SmartCar(Car):
     def run(self): # Implementation irrelevant to project
         pass
 
+
         
+if __name__ == '__main__':
+    people: "list[People]" = Person.get_people(100)
+    passengers: "list[Passenger]" = random.sample(people, num_passengers)
+    pedestrians: "list[Pedestrian]" = random.sample(people, num_pedestrians)
