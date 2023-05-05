@@ -26,35 +26,35 @@ class SmartCar(Car):
         passengers, pedestrians = self.collect_decision_data()
         return self.calculate_mean_decision(passengers, pedestrians)
 
-    def calculate_mean_decision(self, passengers: "list[Passenger]", pedestrians: "list[Pedestrian]"):
-        tot_passenger_value = sum([self.calculate_value(passenger) for passenger in passengers])
-        avg_passenger_value = tot_passenger_value / len(passengers)
-
-        tot_pedestrian_value = sum([self.calculate_value(pedestrian) for pedestrian in pedestrian])
-        avg_pedestrian_value = tot_pedestrian_value / len(pedestrian)
-
-        return PROTECT_PASSENGERS 
-               if avg_pedestrian_value >= avg_pedestrian_value 
-               else PROTECT_PEDESTRIANS
-
-
     def collect_decision_data(self, passengers: "list[Passenger]" = None, pedestrians: "list[Pedestrian]" = None):
         v_passengers: "list[Passenger]" = passengers if passengers else self.passengers
         v_pedestrians: "list[Pedestrian]" = pedestrians if pedestrians else self.survey_environment()
 
-        return v_passengers, v_pedestrians
+        return (v_passengers, v_pedestrians)
 
-    def calculate_value(self, person: Person) -> int:
+    def calculate_mean_decision(self, passengers: "list[Passenger]", pedestrians: "list[Pedestrian]"):
+        tot_passenger_value = sum([self.calculate_human_value(passenger) for passenger in passengers])
+        avg_passenger_value = tot_passenger_value / len(passengers)
+
+        tot_pedestrian_value = sum([self.calculate_human_value(pedestrian) for pedestrian in pedestrian])
+        avg_pedestrian_value = tot_pedestrian_value / len(pedestrian)
+
+        return PROTECT_PASSENGERS 
+               if (400 * len(passengers) + avg_pedestrian_value) 
+               >= (400 * len(pedestrians) + avg_pedestrian_value) 
+               else PROTECT_PEDESTRIANS
+
+    def calculate_human_value(self, person: Person) -> int:
         age_bias, weight_bias, class_bias, law_bias = self.get_regional_bias(person)
         return (((100 - person.age) if person.age >= 30 else (person.age + 20)) + age_bias) \
                 + ((300 - int(person.weight)) + weight_bias)
-                + (200 + person.education_level * 10)
+                + (150 + person.education_level * 10)
                 + (400 if person.is_doctor else 0)
                 + (300 if person.employed else 0)
                 + (200 if person.married else 0)
                 + (100 * person.num_children)
                 + (20 * person.num_living_relatives)
-                + ((-400 if person.actively_breaking_law else 0) + law_bias)
+                + ((-300 if person.actively_breaking_law else 0) + law_bias)
                 + class_bias
 
     def get_regional_bias(self, person: Person):
@@ -80,7 +80,7 @@ class SmartCar(Car):
                 regional_class_bias = person.wealth_class.value * 60
                 regional_law_bias = 20
 
-
+        return (regional_age_bias, regional_weight_bias, regional_class_bias, regional_law_bias)
 
 
 
