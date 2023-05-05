@@ -7,7 +7,7 @@ import math as math
 pd.options.display.max_rows = 100
 
 # import data
-df = pd.read_csv('/Users/paul/Desktop/CSCI1952B/av-final/analysis/data/SharedResponses.csv', nrows=10000)
+df = pd.read_csv('../data/SharedResponses.csv', nrows=100)
 
 # print(df.head(10))
 
@@ -20,7 +20,7 @@ new_df = df.dropna()
 
 # print(new_df.describe())
 
-print(new_df.columns)
+# print(new_df.columns)
 
 des_df = new_df[['NumberOfCharacters', 'Intervention']]
 
