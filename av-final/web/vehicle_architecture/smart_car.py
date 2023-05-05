@@ -1,5 +1,9 @@
+import random
 from enum import Enum
-from "av-final/web/person_architecture" import Passenger, Pedestrian, Person
+from car import Car
+from person import Person
+from passenger import Passenger
+from pedestrian import Pedestrian
 
 class Region(Enum):
     WESTERN = 0
@@ -32,38 +36,40 @@ class SmartCar(Car):
 
         return (v_passengers, v_pedestrians)
 
-    def calculate_mean_decision(self, passengers: "list[Passenger]", pedestrians: "list[Pedestrian]"):
-        tot_passenger_value = sum([self.calculate_human_value(passenger) for passenger in passengers])
+    @staticmethod
+    def calculate_mean_decision(passengers: "list[Passenger]", pedestrians: "list[Pedestrian]"):
+        tot_passenger_value = sum([SmartCar.calculate_human_value(passenger) for passenger in passengers])
         avg_passenger_value = tot_passenger_value / len(passengers)
 
-        tot_pedestrian_value = sum([self.calculate_human_value(pedestrian) for pedestrian in pedestrian])
-        avg_pedestrian_value = tot_pedestrian_value / len(pedestrian)
+        tot_pedestrian_value = sum([SmartCar.calculate_human_value(pedestrian) for pedestrian in pedestrians])
+        avg_pedestrian_value = tot_pedestrian_value / len(pedestrians)
 
-        return PROTECT_PASSENGERS 
-               if (400 * len(passengers) + avg_pedestrian_value) 
-               >= (400 * len(pedestrians) + avg_pedestrian_value) 
-               else PROTECT_PEDESTRIANS
+        return Decision.PROTECT_PASSENGERS if ((400 * len(passengers) + avg_pedestrian_value) >= (400 * len(pedestrians) + avg_pedestrian_value)) else Decision.PROTECT_PEDESTRIANS
 
-    def calculate_human_value(self, person: Person) -> int:
-        age_bias, weight_bias, class_bias, law_bias = self.get_regional_bias(person)
+    @staticmethod
+    def calculate_human_value(person: Person) -> int:
+        age_bias, weight_bias, class_bias, law_bias = SmartCar.get_regional_bias(person)
         return (((100 - person.age) if person.age >= 30 else (person.age + 20)) + age_bias) \
-                + (((300 - int(person.weight)) if self.age >= 18 else 100) + weight_bias)
-                + (150 + person.education_level * 10)
-                + (400 if person.is_doctor else 0)
-                + (300 if person.employed else 0)
-                + (200 if person.married else 0)
-                + (100 * person.num_children)
-                + (20 * person.num_living_relatives)
-                + ((-300 if person.actively_breaking_law else 0) + law_bias)
+                + (((300 - int(person.weight)) if person.age >= 18 else 100) + weight_bias) \
+                + (150 + person.education_level * 10) \
+                + (400 if person.is_doctor else 0) \
+                + (300 if person.employed else 0) \
+                + (200 if person.married else 0) \
+                + (100 * person.num_children) \
+                + (20 * person.num_living_relatives) \
+                + ((-300 if person.actively_breaking_law else 0) + law_bias) \
                 + class_bias
 
-    def get_regional_bias(self, person: Person):
+    @staticmethod
+    def get_regional_bias(person: Person):
         regional_age_bias = None
         regional_weight_bias = None
         regional_class_bias = None
         regional_law_bias = None
 
-        match self.region:
+        reg = Region.WESTERN
+
+        match reg:
             case Region.WESTERN:
                 regional_age_bias = 90
                 regional_weight_bias = 90
@@ -97,5 +103,11 @@ class SmartCar(Car):
         
 if __name__ == '__main__':
     people: "list[People]" = Person.get_people(100)
+    num_passengers = random.randint(1, 5)
+    num_pedestrians = random.randint(1, 5)
     passengers: "list[Passenger]" = random.sample(people, num_passengers)
     pedestrians: "list[Pedestrian]" = random.sample(people, num_pedestrians)
+
+    dec = SmartCar.calculate_mean_decision(passengers, pedestrians)
+
+    print(dec)

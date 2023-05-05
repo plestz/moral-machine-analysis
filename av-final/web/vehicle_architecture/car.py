@@ -1,5 +1,7 @@
 from enum import Enum
-from "../web/person_architecture" import Passenger
+from person import Person
+from passenger import Passenger
+from pedestrian import Pedestrian
 
 class VehicleCondition(Enum):
     BROKEN = 0
