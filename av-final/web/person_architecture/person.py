@@ -56,7 +56,7 @@ class Person:
             occupation = 'Student' if age <= 18 else random.choice(occupations)
             is_doctor = occupation == 'Doctor'
             employed = occupation != 'Unemployed'
-            wealth_class = np.random.choice(list(Class), p=[0.2, 0.2, 0.2, 0.2, 0.1, 0.05, 0.05])
+            wealth_class = np.random.choice(list(Class), p=[0.05, 0.2, 0.2, 0.34, 0.15, 0.05, 0.01])
             
             if age >= 26:
                 married = random.choice([True, False])
