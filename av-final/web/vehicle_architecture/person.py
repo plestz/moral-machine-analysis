@@ -64,7 +64,7 @@ class Person:
                 married = False
 
             num_children = random.randint(0, 5)
-            num_living_relatives = random.randint(0, 15)
+            num_living_relatives = random.randint(0, 10)
             actively_breaking_law = random.random() < 0.1
 
             person = Person(name, age, gender, weight, education_level, occupation, is_doctor, employed, wealth_class, married, num_children, num_living_relatives, actively_breaking_law)

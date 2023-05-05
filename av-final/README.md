@@ -1,0 +1,1 @@
+In order to run the Moral Machine, navigate to '/av-final/web/vehicle_architecture' and execute 'python smart_car.py' in the terminal.
