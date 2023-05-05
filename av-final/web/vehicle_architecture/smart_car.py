@@ -45,26 +45,41 @@ class SmartCar(Car):
         return v_passengers, v_pedestrians
 
     def calculate_value(self, person: Person) -> int:
-        return ((100 - self.age) if self.age >= 30 else (self.age + 20)) \
-                + (300 - int(self.weight))
-                + (200 + self.education_level * 10)
-                + (400 if self.is_doctor else 0)
-                + (300 if self.employed else 0)
-                + (200 if self.married else 0)
-                + (100 * self.num_children)
-                + (20 * self.num_living_relatives)
-                + (-400 if actively_breaking_law else 0)
+        age_bias, weight_bias, class_bias, law_bias = self.get_regional_bias(person)
+        return (((100 - person.age) if person.age >= 30 else (person.age + 20)) + age_bias) \
+                + ((300 - int(person.weight)) + weight_bias)
+                + (200 + person.education_level * 10)
+                + (400 if person.is_doctor else 0)
+                + (300 if person.employed else 0)
+                + (200 if person.married else 0)
+                + (100 * person.num_children)
+                + (20 * person.num_living_relatives)
+                + ((-400 if person.actively_breaking_law else 0) + law_bias)
+                + class_bias
 
-    def get_regional_bias(self):
+    def get_regional_bias(self, person: Person):
         regional_age_bias = None
         regional_weight_bias = None
-        regional_weight_bias = None
+        regional_class_bias = None
+        regional_law_bias = None
 
         match self.region:
             case Region.WESTERN:
-
+                regional_age_bias = 90
+                regional_weight_bias = 90
+                regional_class_bias = person.wealth_class.value * 20
+                regional_law_bias = 20
             case Region.EASTERN:
+                regional_age_bias = -100
+                regional_weight_bias = -100
+                regional_class_bias = 0
+                regional_law_bias = 150
             case Region.SOUTHERN:
+                regional_age_bias = 150
+                regional_weight_bias = 90
+                regional_class_bias = person.wealth_class.value * 60
+                regional_law_bias = 20
+
 
 
 
